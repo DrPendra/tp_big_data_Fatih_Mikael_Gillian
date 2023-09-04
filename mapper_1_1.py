@@ -32,8 +32,9 @@ counter = 0
 # input comes from STDIN (standard input)
 for line in sys.stdin:
 
-    line= line.replace('""', '')
+    line= line.replace('""', '\'')
     tupleList = re.findall(r'(?:"([\w\-\+\&\.:\ ,\'\/]+)")|(?:,([\w\ ]*)(?=,))', line)
+    
     words = contructList(tupleList)
     if not checkMandatoryColumn(words):
         continue
@@ -55,7 +56,7 @@ for line in sys.stdin:
         cond = False
 
     if cond:
-        finalStr = words[5] + " " + str(annee) + " " + words[17]
+        finalStr = words[5] + ";" + words[17]  + ";" + str(annee)
         print('%s;%i' % (finalStr, 1))
 
 '''
