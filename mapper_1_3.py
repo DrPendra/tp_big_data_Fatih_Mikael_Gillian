@@ -47,7 +47,7 @@ for line in sys.stdin:
     if words[10] == 'NULL' or words[10] == '':
         cond = False
     if cond:
-        finalStr = words[2]+";"+words[3] + ";"+words[17]+";"+ str(qte)  + ";" + str(annee)
+        finalStr = words[17]+";"+ str(qte)  + ";" + str(annee)
         print('%s;%i' % (finalStr, 1))
 
 '''
