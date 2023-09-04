@@ -45,10 +45,9 @@ for line in sys.stdin:
     annee = int(date[0:4])
 
     qte = int(nullOrEmpty(words[15],0))
-    if dp != 53 or dp != 72 ou  dp != 49:
-        cond = False
+
     if cond:
-        finalStr = words[2]+";"+words[3] + ";"+";"+ str(words[15])  + ";" + str(annee)
+        finalStr = words[2]+";"+words[3] + ";"+words[17]+";"+ str(qte)  + ";" + str(annee)
         print('%s;%i' % (finalStr, 1))
 
 '''
