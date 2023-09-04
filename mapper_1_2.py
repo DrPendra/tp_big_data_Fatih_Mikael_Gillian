@@ -49,7 +49,7 @@ for line in sys.stdin:
         cond = False
 
     if cond:
-        finalStr = words[2]+";"+words[3] + ";"+str(dp)+";"+words[5] +";"+ str(words[15]) 
+        finalStr = words[2]+";"+words[3] + ";"+str(dp)+";"+words[5]+";"+words[10] +";"+ str(words[15]) 
         print('%s;%i' % (finalStr, 1))
 
 '''
