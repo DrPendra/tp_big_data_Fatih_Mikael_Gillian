@@ -32,22 +32,25 @@ counter = 0
 # input comes from STDIN (standard input)
 for line in sys.stdin:
 
-    line= line.replace('""', '\'')
+    line= line.replace('""', '')
     tupleList = re.findall(r'(?:"([\w\-\+\&\.:\ ,\'\/]+)")|(?:,([\w\ ]*)(?=,))', line)
-    
     words = contructList(tupleList)
     if not checkMandatoryColumn(words):
         continue
     cond = True
+    dp = int(float(nullOrEmpty(words[4],0))/1000)
 
     date = nullOrEmpty(words[7],"0000-00-00 00:00:00")
     annee = int(date[0:4])
-
     qte = int(nullOrEmpty(words[15],0))
+    if words[9] == 'NULL' or words[9] == '':
+        cond = False
     if words[10] == 'NULL' or words[10] == '':
         cond = False
+    if annee < 2006 or annee > 2016:
+        cond = False
     if cond:
-        finalStr = words[2]+";"+words[3] + ";"+words[17]+";"+ str(qte)  + ";" + str(annee)
+        finalStr = words[5] + ";" +words[9]+ ";" +words[10]
         print('%s;%i' % (finalStr, 1))
 
 '''
