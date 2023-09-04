@@ -49,8 +49,8 @@ for line in sys.stdin:
         cond = False
 
     if cond:
-        finalStr = words[2]+";"+words[3] + ";"+str(dp)+";"+words[5]+";"+words[10] +";"+ str(words[15]) 
-        print('%s;%i' % (finalStr, 1))
+        finalStr = words[2]+";"+words[3] + ";"+str(dp)+";"+words[5]+";"+words[10]
+        print('%s' % (finalStr))
 
 '''
 hadoop jar hadoop-streaming-2.7.2.jar -file mapper.py -mapper "python3 mapper.py" -file reducer.py -reducer "python3 reducer.py" -input input/word.txt -output output01
