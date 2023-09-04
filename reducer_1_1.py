@@ -11,10 +11,16 @@ index = 0
 table = None
 connection = happybase.Connection('127.0.0.1', 9090)
 connection.open()
-tableName = "Statistiques_1_1"
+tableName = b"Statistiques_1_1"
 if tableName in set(connection.tables()):
   connection.delete_table(tableName, disable=True)
+
+connection.create_table(tableName, {'cf_info': dict()})
+
 table = connection.table(tableName)
+
+fileName = "st_1_1.txt"
+file = open(fileName, "w")
 
 # input comes from STDIN
 for line in sys.stdin:
@@ -49,7 +55,7 @@ for line in sys.stdin:
             # write result to STDOUT
             print('%s\t%s' % (current_word, current_count))
             table.put(b'%i' % index, {b'cf_info:city': '%s' % cur_city,b'cf_info:obj': '%s' % cur_obj,b'cf_info:annee': '%s' % cur_annee, b'cf_info:count': '%i' % current_count})
-
+            file.write(current_word + ";"+str(current_count)+"\n")
         current_count = count
         current_word = word
         index += 1
@@ -61,7 +67,7 @@ if current_word == word:
     cur_city,cur_obj,cur_annee = word.split(';')
     print('%s\t%s' % (current_word, current_count))
     table.put(b'%i' % index, {b'cf_info:city': '%s' % cur_city,b'cf_info:obj': '%s' % cur_obj,b'cf_info:annee': '%s' % cur_annee, b'cf_info:count': '%i' % current_count})
-
+    file.write(current_word + ";"+str(current_count)+"\n")
 connection.close()
 
 
