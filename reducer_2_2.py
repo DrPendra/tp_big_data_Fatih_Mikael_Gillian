@@ -3,6 +3,7 @@ import happybase
 import pandas as pd
 from matplotlib.backends.backend_pdf import PdfPages
 import matplotlib.pyplot as plt
+import pandas as pd
 
 current_commande=None
 current_count=0
@@ -39,29 +40,27 @@ for line in sys.stdin:
         current_commande = codcde
 
 liste = sorted(liste_tempo, key=lambda liste: liste["compte"], reverse=True)
-
+df = pd.DataFrame()
 for i in range(0,int(round(len(liste_tempo)*0.05))):
     current_word = liste[i]['ville']+";"+liste[i]['nbcolis']+";"+str(liste[i]['compte'])
     ville, nbcolis, compte = current_word.split(";")
-    print('%s' % (current_word))
+    #print('%s' % (current_word))
     table.put(b'%i' % index, {b'cf_info:Ville': '%s' % ville,b'cf_info:Nombre_de_colis': '%s' % nbcolis,b'cf_info:Moyenne_compte': '%s' % "{0:.2f}".format(float(max_compte)/float(compte))})
+    df.append(liste[i], ignore_index=True)
     file.write(current_word+'\n')
     index += 1
 connection.close()
-
-
-'''data =[12,25,85]
-df = pd.DataFrame(data)
-# Créer une nouvelle figure
-plt.figure()
-
+df.to_excel("Résultat_2_2.xlsx", index=False)
+#plt.figure()
+'''
 # Créer le graphe pie
-plt.pie(data, labels=data, autopct='%1.1f%%', startangle=140)
+plt.pie( labels=data, autopct='%1.1f%%', startangle=140)
 plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-plt.title("Répartition des commandes par département")
+plt.title("Moyenne de commande sans timbrecode par ville entre 2006 et 2016")
 
 # Enregistrer le graphe au format PDF
 
-output_pdf_file = '/datavolume1/resultat.pdf'
+output_pdf_file = '/root/resultat_2_2.pdf'
 with PdfPages(output_pdf_file) as pdf:
-    pdf.savefig()  # Sauvegarder le graphe dans le fichier PDF'''
+    pdf.savefig()
+'''

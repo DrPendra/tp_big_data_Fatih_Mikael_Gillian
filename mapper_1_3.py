@@ -47,8 +47,8 @@ for line in sys.stdin:
     if words[10] == 'NULL' or words[10] == '':
         cond = False
     if cond:
-        finalStr = words[17]+";"+ str(qte)  + ";" + str(annee)
-        print('%s;%i' % (finalStr, 1))
+        finalStr = words[17]+";"+ str(annee)  + ";" + str(qte)
+        print('%s' % (finalStr))
 
 '''
 hadoop jar hadoop-streaming-2.7.2.jar -file mapper.py -mapper "python3 mapper.py" -file reducer.py -reducer "python3 reducer.py" -input input/word.txt -output output01
