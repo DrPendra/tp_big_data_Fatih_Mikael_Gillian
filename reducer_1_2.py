@@ -7,6 +7,7 @@ from functools import cmp_to_key
 
 current_word = None
 current_count = 0
+current_nbColis = 0
 word = None
 index = 0
 table = None
@@ -37,16 +38,18 @@ for line in sys.stdin:
 
     if current_word == word:
         current_count += 1
+        current_nbColis += nbColis
     else:
         if current_word:
             cur_nomCli,cur_prenomCli,cur_dep,cur_city = word.split(';')
             # write result to STDOUT
-            print('%s\t%s' % (current_word, current_count))
+            print('%s\t%s' % (current_word+";"+  str(current_nbColis), current_count))
             #table.put(b'%i' % index, {b'cf_info:nomCli': '%s' % cur_nomCli,b'cf_info:prenomCli': '%s' % cur_prenomCli,b'cf_info:dep': '%s' % cur_dep, b'cf_info:city': '%i' % cur_city, b'cf_info:city': '%i' % cur_city})
             #file.write(current_word + ";"+str(current_count)+"\n")
-            clientList.append({'info':current_word,'qte':current_count})
+            clientList.append({'info':current_word+";"+str(current_nbColis),'qte':current_count})
         current_count = 1
         current_word = word
+        current_nbColis = nbColis
         index += 1
 
 
@@ -54,10 +57,10 @@ for line in sys.stdin:
 # do not forget to output the last word if needed!
 if current_word == word:
     nomCli,prenomCli,dep,city = word.split(';')
-    print('%s\t%s' % (current_word, current_count))
+    print('%s\t%s' % (current_word+";"+ str(current_nbColis), current_count))
     #table.put(b'%i' % index, {b'cf_info:city': '%s' % cur_city,b'cf_info:obj': '%s' % cur_obj,b'cf_info:annee': '%s' % cur_annee, b'cf_info:count': '%i' % current_count})
     #file.write(current_word + ";"+str(current_count)+"\n")
-    clientList.append({'info':current_word,'qte':current_count})
+    clientList.append({'info':current_word+";"+str(current_nbColis),'qte':current_count})
 connection.close()
 
     
@@ -79,18 +82,63 @@ data = sorted(clientList, key=cmp_to_key(comparator))
 [print(e) for e in data[0:10]]
 
 
-'''data =[12,25,85]
+noms = []
+prenoms = []
+deps = []
+cities = []
+dataNbColis = []
+
+for e in data[0:10]:
+    nomCli,prenomCli,dep,city,nbColis = e["info"].split(';')
+    noms.append(nomCli)
+    prenoms.append(prenomCli)
+    deps.append(dep)
+    cities.append(city)
+    dataNbColis.append(int(nbColis))
+
+data = {
+    'Nom': noms,
+    'Prenom': prenoms,
+    'Departement': deps,
+    'Ville': cities,
+    'NbColis': dataNbColis
+}
+
 df = pd.DataFrame(data)
 # Créer une nouvelle figure
-plt.figure()
+'''plt.figure()
 
 # Créer le graphe pie
-plt.pie(data, labels=data, autopct='%1.1f%%', startangle=140)
+plt.pie(data['NbColis'], labels=data['Ville'], autopct='%1.1f%%', startangle=140)
 plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
 plt.title("Répartition des commandes par département")
-
-# Enregistrer le graphe au format PDF
+# Enregistrer le graphe au format PDF'''
 
 output_pdf_file = '/datavolume1/resultat.pdf'
-with PdfPages(output_pdf_file) as pdf:
-    pdf.savefig()  # Sauvegarder le graphe dans le fichier PDF'''
+pdf_pages = PdfPages(output_pdf_file)
+
+df_nbColis_Ville = df.groupby('Ville')['NbColis'].sum().reset_index()
+#print(df_nbColis_Ville)
+fig1 = plt.figure()
+ax1 = fig1.add_subplot(111)
+ax1.bar(df_nbColis_Ville['Ville'], df_nbColis_Ville['NbColis'])
+ax1.set_xlabel('Ville')
+ax1.set_ylabel('Nombre Colis')
+ax1.set_title('Nombre de colis par ville')
+ax1.set_xticklabels(df_nbColis_Ville['Ville'], rotation=45)
+pdf_pages.savefig(fig1)
+plt.close(fig1)
+
+'''df_meanColis_Ville = df.groupby('Ville')['NbColis'].mean().reset_index()
+fig2 = plt.figure()
+ax2 = fig1.add_subplot(111)
+ax2.bar(df_meanColis_Ville['Ville'], df_meanColis_Ville['NbColis'])
+ax2.set_xlabel('Ville')
+ax2.set_ylabel('Moyenne Nombre Colis')
+ax2.set_title('Moyenne de Nombre de colis par ville')
+ax2.set_xticklabels(df_meanColis_Ville['Ville'], rotation=45)
+pdf_pages.savefig(fig2)
+plt.close(fig2)'''
+
+# Fermez l'objet PdfPages pour enregistrer le fichier PDF final
+pdf_pages.close()
