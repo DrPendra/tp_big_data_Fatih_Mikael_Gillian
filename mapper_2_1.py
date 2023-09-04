@@ -50,8 +50,8 @@ for line in sys.stdin:
     if annee < 2006 or annee > 2016:
         cond = False
     if cond:
-        finalStr = words[5] + ";" +words[9]+ ";" +words[10]
-        print('%s;%i' % (finalStr, 1))
+        finalStr = words[5] + ";" +words[9]+ ";" +words[10]+";"+words[6]
+        print('%s' % (finalStr))
 
 '''
 hadoop jar hadoop-streaming-2.7.2.jar -file mapper.py -mapper "python3 mapper.py" -file reducer.py -reducer "python3 reducer.py" -input input/word.txt -output output01
