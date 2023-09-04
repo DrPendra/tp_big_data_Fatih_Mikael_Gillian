@@ -1,0 +1,55 @@
+VERSION PYTHON  : 3.5.2
+
+Supprimer les conteneurs : hadoop-master,hadoop-slave1,hadoop-slave2
+
+Le volume docker s'appelle dans cet exemple : cge01
+
+docker run -v cge01:/datavolume1 -itd --net=hadoop -p 9090:9090 -p 9070:50070 -p 8088:8088 -p 7077:7077 -p 16010:16010 --name hadoop-master --hostname hadoop-master liliasfaxi/spark-hadoop:hv-2.7.2 
+docker run -v cge01:/datavolume1 -itd --net=hadoop -p 8040:8042 --name hadoop-slave1 --hostname hadoop-slave1 liliasfaxi/spark-hadoop:hv-2.7.2 
+docker run -v cge01:/datavolume1 -itd --net=hadoop -p 8041:8042 --name hadoop-slave2 --hostname hadoop-slave2 liliasfaxi/spark-hadoop:hv-2.7.2 
+
+
+Mettre les fichiers *.sh suivant dans le docker hadoop-master :
+docker cp happybase.sh hadoop-master:/root
+docker cp hbase.sh hadoop-master:/root
+docker cp hbase_drop.sh hadoop-master:/root
+docker cp setup.sh hadoop-master:/root
+docker cp hbase_odbc_rest.sh hadoop-master:/root
+
+Mettre les fichiers *.sh suivant dans le docker hadoop-slave1 :
+docker cp setup_slave.sh hadoop-slave1:/root
+docker cp service_slv.sh hadoop-slave1:/root
+
+Mettre les fichiers *.sh suivant dans le docker hadoop-slave2 :
+docker cp setup_slave.sh hadoop-slave2:/root
+docker cp service_slv.sh hadoop-slave2:/root
+
+
+Puis dans le docker hadoop-master :
+docker exec -it hadoop-master bash
+./setup.sh
+exit
+
+Puis dans le docker hadoop-slave1 :
+docker exec -it hadoop-slave1 bash
+./setup_slave.sh
+./service_slv.sh
+exit
+
+Puis dans le docker hadoop-slave2 :
+docker exec -it hadoop-slave2 bash
+./setup_slave.sh
+./service_slv.sh
+exit
+
+Attention, lorsque vous allez exécuter MapReduce en streaming
+Pensez à exécuter './service_slv.sh' dans hadoop-slave1 et hadoop-slave2
+
+docker exec hadoop-master /bin/bash -c './hbase.sh'
+docker exec hadoop-slave1 /bin/bash -c './setup_slave.sh'
+docker exec hadoop-slave2 /bin/bash -c './setup_slave.sh'
+docker exec hadoop-slave1 /bin/bash -c './service_slv.sh'
+docker exec hadoop-slave2 /bin/bash -c './service_slv.sh'
+
+
+
