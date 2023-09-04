@@ -55,7 +55,7 @@ for line in sys.stdin:
         cond = False
 
     if cond:
-        finalStr = words[5] + " " + str(annee) + " " + words[17]
+        finalStr = words[5] + ";" + str(annee) + ";" + words[17]
         print('%s;%i' % (finalStr, 1))
 
 '''
