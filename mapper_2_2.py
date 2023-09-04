@@ -45,7 +45,7 @@ for line in sys.stdin:
     if dp != 53 and dp != 61 and dp != 28 :
         cond = False
     if cond:
-        finalStr = words[5] + ";" +words[9]+ ";" +words[10]
+        finalStr = words[5] + ";" +words[9]+ ";" +words[10] +";"+words[6]
         print('%s;%i' % (finalStr, 1))
 
 '''

@@ -38,11 +38,9 @@ for line in sys.stdin:
     if not checkMandatoryColumn(words):
         continue
     cond = True
-    dp = int(float(nullOrEmpty(words[4],0))/1000)
 
     date = nullOrEmpty(words[7],"0000-00-00 00:00:00")
     annee = int(date[0:4])
-    qte = int(nullOrEmpty(words[15],0))
     if words[9] == 'NULL' or words[9] == '':
         cond = False
     if words[10] == 'NULL' or words[10] == '':
