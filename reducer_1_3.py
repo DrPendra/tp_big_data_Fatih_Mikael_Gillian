@@ -32,7 +32,7 @@ for line in sys.stdin:
     line = line.strip()
 
     # parse the input we got from mapper.py
-    libelle_obj,qte, annee = line.split(';')
+    libelle_obj,annee, qte = line.split(';')
     word = libelle_obj +';'+qte+';'+annee
     # sotcke dans une dict word et count : maliste
 
@@ -47,17 +47,17 @@ for line in sys.stdin:
     if libelle_obj == current_object and annee == current_annee:
         qte_max += int(qte)
     else:
-        if current_annee:
+        if current_object != None:
             cur_city,cur_obj,cur_annee = word.split(';')
             # write result to STDOUT
             print('%s' % (word))
-            table.put(b'%i' % index, {b'cf_info:libelle_obj': '%s' % libelle_obj,b'cf_info:qte': '%s' % str(qte_max),b'cf_info:annee': '%s' % annee})
-            x.append(int(annee))
+            table.put(b'%i' % index, {b'cf_info:libelle_obj': '%s' % current_object,b'cf_info:qte': '%s' % qte_max,b'cf_info:annee': '%s' % current_annee})
+            x.append(int(current_annee))
             y.append(int(qte_max))
-            label.append(libelle_obj)
+            label.append(current_object)
             file.write(word + "\n")
         index += 1
-        qte = 1
+        qte_max = 1
         current_annee = annee
         current_object = libelle_obj
 
@@ -66,21 +66,25 @@ for line in sys.stdin:
 
 # do not forget to output the last word if needed!
 print('%s' % (word))
-table.put(b'%i' % index, {b'cf_info:libelle_obj': '%s' % libelle_obj,b'cf_info:qte': '%s' % qte,b'cf_info:annee': '%s' % annee})
-x.append(int(annee))
+table.put(b'%i' % index, {b'cf_info:libelle_obj': '%s' % current_object,b'cf_info:qte': '%s' % qte_max,b'cf_info:annee': '%s' % current_annee})
+x.append(int(current_annee))
 y.append(int(qte_max))
-label.append(libelle_obj)
+label.append(current_object)
 file.write(word +'\n')
 connection.close()
-
-
-# Créer une nouvelle figure
 plt.figure()
+fig, ax=plt.subplots()
+data={'x': x, 'y':y, 'label':label}
+df= pd.DataFrame(data)
+distint_label=set(label)
 
-# Créer le graphe pie
-plt.plot(x, y,  label=label)
-plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-plt.title("Courbe de croissance de chaque objet")
+for i in distint_label:         
+    select_draw=df.loc[df['label'] == i]
+    df_gp = select_draw.groupby('x')['y'].sum().reset_index()
+    ax.plot(df_gp['x'], df_gp['y'], label = i)
+ax.legend()
+ax.set_xlim(2000, 2023)
+ax.set_title("Courbe de croissance de chaque objet")
 
 # Enregistrer le graphe au format PDF
 

@@ -44,6 +44,8 @@ for line in sys.stdin:
     annee = int(date[0:4])
 
     qte = int(nullOrEmpty(words[15],0))
+    if annee <2000:
+        cond = False
     if words[10] == 'NULL' or words[10] == '':
         cond = False
     if cond:
