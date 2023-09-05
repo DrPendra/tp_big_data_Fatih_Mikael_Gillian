@@ -1,14 +1,18 @@
-import happybase
+import pandas as pd
+import matplotlib.pyplot as plt
 
-table = None
-connection = happybase.Connection('127.0.0.1', 9090)
-connection.open()
-tableName = b"Statistiques_1_1"
-if tableName in set(connection.tables()):
-  connection.delete_table(tableName, disable=True)
+# Exemple de DataFrame avec des valeurs non arrondies
+data = {'Col1': [1.234, 2.567, 3.789],
+        'Col2': [4.321, 5.432, 6.123],
+        'Col3': [7.654, 8.765, 9.876]}
 
-connection.create_table(tableName, {'cf_data': dict()})
+df = pd.DataFrame(data)
 
-table = connection.table(tableName)
-table.put(b'%i' % 1, {b'cf_data:name': '%s' % 'Goere'})
+# Arrondir les valeurs dans le DataFrame
+df_rounded = df.round(2)  # Arrondir à 2 décimales
 
+# Créer le tableau Matplotlib à partir du DataFrame arrondi
+fig, ax = plt.subplots()
+table = ax.table(cellText=df_rounded.values, colLabels=df_rounded.columns, loc='center')
+ax.axis('off')
+plt.show()
