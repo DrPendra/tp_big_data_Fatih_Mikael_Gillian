@@ -26,7 +26,7 @@ for line in sys.stdin:
     # remove leading and trailing whitespace
     line = line.strip()
     # parse the input we got from mapper.py
-    ville , timbrecde, nbcolis, codcde = line.split(';')
+    codcde, ville , timbrecde, nbcolis = line.split(';')
     if codcde == current_commande:
             continue
     else:
@@ -34,16 +34,19 @@ for line in sys.stdin:
         current_commande = codcde
 
 liste = sorted(liste_tempo, key=lambda liste: liste["timbrecde"], reverse=True)
-
+liste_excel=[]
 for i in range(0,100):
     current_word = liste[i]['ville']+";"+liste[i]['nbcolis']+";"+str(liste[i]['timbrecde'])
     ville, nbcolis, timbrecde = current_word.split(";")
     print('%s' % (current_word))
     table.put(b'%i' % index, {b'cf_info:Ville': '%s' % ville,b'cf_info:Nombre_de_colis': '%s' % nbcolis,b'cf_info:Timbre_code': '%s' % timbrecde})
+    liste_excel.append({'ville':ville,'nbcolis':nbcolis, 'timbrecde': float(timbrecde)})
     file.write(current_word+'\n')
     index += 1
 connection.close()
-
+print(len(liste_excel))
+df=pd.DataFrame(liste_excel)
+df.to_excel("Resultat_2_1.xlsx")
 
 '''data =[12,25,85]
 df = pd.DataFrame(data)
