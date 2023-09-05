@@ -40,12 +40,16 @@ for line in sys.stdin:
     cond = True
     dp = int(float(nullOrEmpty(words[4],0))/1000)
     timbrecli = int(float(nullOrEmpty(words[8],0)))
-    if  timbrecli != 0:
+    date = nullOrEmpty(words[7],"0000-00-00 00:00:00")
+    annee = int(date[0:4])
+    if words[9] == 'NULL' or words[9] == '':
         cond = False
-    if dp != 53 and dp != 61 and dp != 28 :
+    if words[10] == 'NULL' or words[10] == '':
+        cond = False
+    if annee < 2006 or annee > 2016:
         cond = False
     if cond:
-        finalStr = words[6]+";"+words[5] + ";" +words[9]+ ";" +words[10] 
+        finalStr = words[6]+";"+words[5] + ";" +words[9]+ ";" +words[10] + ";" +str(dp) + ";" +words[8] 
         print('%s;%i' % (finalStr, 1))
 
 '''

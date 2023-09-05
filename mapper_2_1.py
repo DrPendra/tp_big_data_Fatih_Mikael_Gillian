@@ -48,7 +48,7 @@ for line in sys.stdin:
     if annee < 2006 or annee > 2016:
         cond = False
     if cond:
-        finalStr = words[5] + ";" +words[9]+ ";" +words[10]+";"+words[6]
+        finalStr = words[6]+";"+words[5] + ";" +words[9]+ ";" +words[10]
         print('%s' % (finalStr))
 
 '''
