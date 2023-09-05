@@ -29,17 +29,17 @@ for line in sys.stdin:
     # remove leading and trailing whitespace
     line = line.strip()
     # parse the input we got from mapper.py
-    ville , timbrecde, nbcolis, codcde, count = line.split(';')
+    codcde,ville , timbrecde, nbcolis,  count = line.split(';')
     if codcde == current_commande:
         current_count += int(count)
     else:
         max_compte+=1
         current_count += int(count)
-        liste_tempo.append({'ville':ville,'nbcolis':nbcolis, 'compte':current_count})
+        liste_tempo.append([ville,nbcolis,current_count])
         current_count = 0
         current_commande = codcde
 
-liste = sorted(liste_tempo, key=lambda liste: liste["compte"], reverse=True)
+liste = sorted(liste_tempo, key=lambda liste: liste[:][2], reverse=True)
 df = pd.DataFrame()
 for i in range(0,int(round(len(liste_tempo)*0.05))):
     current_word = liste[i]['ville']+";"+liste[i]['nbcolis']+";"+str(liste[i]['compte'])

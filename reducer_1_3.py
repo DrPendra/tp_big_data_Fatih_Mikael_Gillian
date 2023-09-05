@@ -73,7 +73,7 @@ label.append(current_object)
 file.write(word +'\n')
 connection.close()
 plt.figure()
-fig, ax=plt.subplots()
+fig, ax=plt.subplots(figsize=(16, 12))
 data={'x': x, 'y':y, 'label':label}
 df= pd.DataFrame(data)
 distint_label=set(label)
@@ -82,8 +82,8 @@ for i in distint_label:
     select_draw=df.loc[df['label'] == i]
     df_gp = select_draw.groupby('x')['y'].sum().reset_index()
     ax.plot(df_gp['x'], df_gp['y'], label = i)
-ax.legend()
-ax.set_xlim(2000, 2023)
+ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+ax.set_xlim(2004, 2023)
 ax.set_title("Courbe de croissance de chaque objet")
 
 # Enregistrer le graphe au format PDF
@@ -91,3 +91,17 @@ ax.set_title("Courbe de croissance de chaque objet")
 output_pdf_file = '/root/resultat_1_3.pdf'
 with PdfPages(output_pdf_file) as pdf:
     pdf.savefig()  # Sauvegarder le graphe dans le fichier PDF'''
+
+plt.close()
+plt.figure()
+fig, ax=plt.subplots(figsize=(16, 12))   
+select_draw=df.loc[df['label'] == 'Tete de menagere']
+df_gp = select_draw.groupby('x')['y'].sum().reset_index()
+ax.plot(df_gp['x'], df_gp['y'], label = 'Tete de menagere')
+ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+ax.set_xlim(2004, 2023)
+ax.set_title("Courbe de croissance de chaque objet")
+
+output_pdf_file = '/root/resultat_1_3_only.pdf'
+with PdfPages(output_pdf_file) as pdf:
+    pdf.savefig()
