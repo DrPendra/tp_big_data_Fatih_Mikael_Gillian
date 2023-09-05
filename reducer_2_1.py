@@ -43,10 +43,11 @@ for i in range(0,100):
     liste_excel.append({'ville':ville,'nbcolis':nbcolis, 'timbrecde': float(timbrecde)})
     file.write(current_word+'\n')
     index += 1
-connection.close()
+
 print(len(liste_excel))
 df=pd.DataFrame(liste_excel)
 df.to_excel("Resultat_2_1.xlsx")
+connection.close()
 
 '''data =[12,25,85]
 df = pd.DataFrame(data)

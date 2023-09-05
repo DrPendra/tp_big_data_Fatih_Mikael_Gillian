@@ -64,7 +64,7 @@ for j in range(0, round(len(liste_trier)*0.05)):
     file.write(current_word+'\n')
     index += 1
 
-connection.close()
+
 liste = sorted(liste_cinq_pourcent, key=lambda liste: liste["timbrecde"], reverse=True)
 df=pd.DataFrame(liste)
 df.to_excel("Resultat_2_2.xlsx")
@@ -73,7 +73,7 @@ plt.figure(figsize=(16, 12))
 #Créer le graphe pie
 plt.pie(df['timbrecde'] ,labels=df['ville'], autopct='%1.1f%%', startangle=140)
 plt.title("Somme des timbrecodes sans timbreclient par ville entre 2006 et 2016 dans les département 53, 61, 28 selon un tirage de 5% aléatoire")
-
+connection.close()
 # Enregistrer le graphe au format PDF
 
 output_pdf_file = '/root/resultat_2_2.pdf'
